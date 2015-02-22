@@ -155,12 +155,17 @@ NodeOsBlog.controller('ErrorListCtrl', function($scope){
 var hello = require("hello");
 hello.init({
   github:"dafb27cb88db35267e75"
-},{redirect_uri:document.location});
+});
 hello.on("auth.login", function(auth){
+  console.log(auth);
   hello(auth.network).api("/me").then(function(r){
     document.querySelector(".four-zero-three .content").innerHTML("You've authenticated!");
   });
 });
+var online = function(session){
+	var current_time = (new Date()).getTime() / 1000;
+	return session && session.access_token && session.expires > current_time;
+};
 NodeOsBlog.controller('BlogListCtrl', function ($scope, $http) {
   $scope.uriPath = "/NodeOS/NodeOS/issues";
   $scope.blog = [];
