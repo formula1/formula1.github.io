@@ -149,6 +149,9 @@ function add403(){
   errors.push(topush);
 }
 var hello = require("hello");
+hello.init({
+  github:"dafb27cb88db35267e75"
+});
 function login(){
   hello( "github" ).login().then( function(auth){
     console.log(arguments);
