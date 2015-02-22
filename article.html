@@ -144,10 +144,22 @@ function add403(){
     topush.message = "Apparently, people have been using our app too much...";
   }else{
     topush.message = "If you'd like to continue, please "+
-    "<button onclick='hello(\"github\").login()'>Log in</button>";
+    "<button onclick='login()'>Log in</button>";
   }
   errors.push(topush);
 }
+var hello = require("hello");
+function login(){
+  hello( "github" ).login().then( function(auth){
+    console.log(arguments);
+    is_authed = true;
+    document.querySelector(".four-zero-three .content").innerHTML("You've authenticated!");
+  	alert("You are signed in to Facebook");
+  }, function( e ){
+  	alert("Signin error: " + e.error.message );
+  });
+}
+
 NodeOsBlog.controller('ErrorListCtrl', function($scope){
   $scope.removeError = function(error){
     var l = errors.length;
@@ -163,20 +175,6 @@ NodeOsBlog.controller('ErrorListCtrl', function($scope){
     }
   };
 });
-var hello = require("hello");
-hello.init({
-  github:"dafb27cb88db35267e75"
-});
-hello.on("auth.login", function(auth){
-  console.log(auth);
-  hello(auth.network).api("/me").then(function(r){
-    document.querySelector(".four-zero-three .content").innerHTML("You've authenticated!");
-  });
-});
-var online = function(session){
-	var current_time = (new Date()).getTime() / 1000;
-	return session && session.access_token && session.expires > current_time;
-};
 var hash = document.location.toString().split("#")[1];
 NodeOsBlog.controller('BlogSingleCtrl', function ($scope, $http) {
   $scope.uriPath = "/NodeOS/NodeOS/issues/"+hash;
