@@ -253,7 +253,7 @@ var auth_queue = [];
 var url = require("url");
 var querystring = require("querystring");
 var docuri = url.parse(window.location.href);
-docuri.query = querystring.parse(docuri.search);
+docuri.query = querystring.parse(docuri.query);
 var config = {
   cid: "dafb27cb88db35267e75",
   yqluri: "store://gdDAnJkTXAuVgzAQ8wboA2"
@@ -321,10 +321,11 @@ function uriAsAuthority(uri,next){
     case -1: return next(uri);
     case 0: return auth_queue.push([uri,next]);
     case 1:
-      var query = querystring.parse(url.parse(uri).search);
+      var query = querystring.parse(url.parse(uri).query);
       console.log(query);
       query.access_token = auth.get("access_token");
-      uri.search = querystring.stringify(query);
+      uri.query = querystring.stringify(query);
+      uri.search = "?"+uri.query;
       console.log(url.format(uri));
       return next(url.format(uri));
   }
