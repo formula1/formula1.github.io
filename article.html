@@ -252,6 +252,7 @@ var auth_queueu = [];
 var url = require("url");
 var querystring = require("querystring");
 var docuri = url.parse(window.location.href);
+console.log(docuri);
 docuri.qs = querystring.parse(docuri.query);
 console.log(docuri.qs);
 var config = {
