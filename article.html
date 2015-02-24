@@ -261,7 +261,7 @@ var config = {
 };
 if(docuri.qs && docuri.qs.code){
   if(docuri.query.state != auth.get("state")){
-    console.error("improper state");
+    console.error(docuri.query.state+" !=  "+auth.get("state"));
     errors.push(new Error("Improper State"));
   }else{
     console.log("getting access");
