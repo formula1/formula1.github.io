@@ -282,14 +282,18 @@ function getAccess(code){
     "select * from github where CODE=\""+code+"\""
   ])).done(function(results){
     console.log("auth success");
+    console.log(arguments);
     auth.set("access_token",results.query.results.OAuth.access_token);
     is_authed = 1;
     jQuery(".four-zero-three .content").text("You've authenticated!");
   }).fail(function(e){
-    console.log("auth fail");
     console.error(arguments);
     is_authed = -1;
-    errors.push(e);
+    errors.push({
+      class:"four-zero-three",
+      name:"You've failed authorization",
+      message: "You can always try again"
+    });
   }).always(function(){
     console.log("always");
     while(auth_queue.length){
