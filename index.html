@@ -270,13 +270,17 @@ function getAccess(code){
     "env \""+config.yqlur+"\"",
     "select * from github where CODE=\""+code+"\""
   ])).done(function(results){
+    console.log("auth success");
     auth.set("access_token",results.query.results.OAuth.access_token);
     is_authed = 1;
     jQuery(".four-zero-three .content").text("You've authenticated!");
   }).fail(function(e){
+    console.log("auth fail");
+    console.error(e);
     is_authed = -1;
     errors.push(e);
   }).always(function(){
+    console.log("always");
     while(auth_queue.length){
       uriAsAuthority.apply(void(0),auth_queue.pop());
     }
