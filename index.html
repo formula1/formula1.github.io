@@ -280,7 +280,7 @@ function getAccess(code){
     jQuery(".four-zero-three .content").text("You've authenticated!");
   }).fail(function(e){
     console.log("auth fail");
-    console.error(e);
+    console.error(arguments);
     is_authed = -1;
     errors.push(e);
   }).always(function(){
