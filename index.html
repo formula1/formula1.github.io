@@ -253,6 +253,7 @@ if(docuri.qs && docuri.qs.code){
     getAccess(docuri.qs.code);
   }
 }else if(auth.get("access_token")){
+  console.log(auth.get("access_token"));
   is_authed = 1;
 }
 
