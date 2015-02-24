@@ -242,20 +242,22 @@ var url = require("url");
 var querystring = require("querystring");
 var docuri = url.parse(window.location.href);
 docuri.qs = querystring.parse(docuri.query);
-if(docuri.query && docuri.query.code){
+console.log(docuri.qs);
+var config = {
+  cid: "dafb27cb88db35267e75",
+  yqluri: "store://gdDAnJkTXAuVgzAQ8wboA2"
+};
+if(docuri.qs && docuri.qs.code){
   if(url.query.state != auth.get("state")){
+    console.error("improper state");
     errors.push(new Error("Improper State"));
   }else{
+    console.log("getting access");
     getAccess(docuri.query.code);
   }
 }else if(auth.get("access_token")){
   is_authed = 1;
 }
-
-var config = {
-  cid: "dafb27cb88db35267e75",
-  yqluri: "store://gdDAnJkTXAuVgzAQ8wboA2"
-};
 
 function login(){
   var state = Date.now()+"_"+Math.random();
