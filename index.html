@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css" />
   <link rel="stylesheet" href="http://node-os.com/css/default.css" />
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
-<script type="text/javascript" src="https://gist.githubusercontent.com/formula1/749db638e5b5ac630caf/raw/d8a913dbe8fb7bc330b30fb07f187c9965a38de6/api.min.js" ></script>
+<script type="text/javascript" src="https://gist.githubusercontent.com/formula1/749db638e5b5ac630caf/raw/2e07d087e9991213d40183f270d15f6d54244d39/api.min.js" ></script>
 <style>
   #articles img{max-width:100%}
   #articles article .title img{width:100px}
@@ -123,33 +123,19 @@
         };
   }]);
   var errors = [];
-var is_authed = false;
+
 function add403(){
   var topush = {
     class:"four-zero-three",
     name:"You've hit max data"
   };
-  if(is_authed){
+  if(is_authed === 1){
     topush.message = "Apparently, people have been using our app too much...";
   }else{
     topush.message = "If you'd like to continue, please "+
     "<button onclick='login()'>Log in</button>";
   }
   errors.push(topush);
-}
-var hello = require("hello");
-hello.init({
-  github:"dafb27cb88db35267e75"
-});
-function login(){
-  hello( "github" ).login().then( function(auth){
-    console.log(arguments);
-    is_authed = true;
-    document.querySelector(".four-zero-three .content").innerHTML("You've authenticated!");
-  	alert("You are signed in to Facebook");
-  }, function( e ){
-  	alert("Signin error: " + e.error.message );
-  });
 }
 
 NodeOsBlog.controller('ErrorListCtrl', function($scope){
@@ -167,45 +153,196 @@ NodeOsBlog.controller('ErrorListCtrl', function($scope){
     }
   };
 });
+/* */
+function parseMarkdown(item,next){
+  uriAsAuthority("https://api.github.com/markdown/raw",function(uri){
+    jQuery.ajax({
+      url:uri,
+      type:'POST',
+      headers: {
+          'Content-Type': 'text/plain'
+      },
+      data:item.body
+    }).done(function(data){
+      item.bodyHTML = data;
+    }).fail(function(response, type, title, config) {
+      if(response.status === 403){
+        add403();
+      }else{
+        errors.push({name:"Bad markdown call: "+response.status, message: data.message});
+      }
+      item.bodyHTML = "<pre>"+item.body+"</pre>";
+    }).finally(function(){
+      next(item);
+    });
+  });
+}
+
+/*
+var markdown = require("markdown").markdown;
+function parseMarkdown(item,next){
+  console.log("parsing");
+
+  try{
+    var t = jQuery("<div>"+markdown.toHTML(item.body)+"</div>");
+    t.find("code").wrap("<pre></pre>");
+
+    item.bodyHTML = t.html();
+    console.log(item.bodyHTML);
+  }catch(e){
+    console.log(e);
+    item.bodyHTML = "<pre>"+item.body+"</pre>";
+  }
+  setTimeout(next.bind(next,item),1);
+}
+/* */
+function CookieStore(id){
+  this.id = id;
+  var cook = document.cookie.split(";");
+  var current;
+  var i;
+  for(i=0;i<cook.length;i++){
+    if(cook[i].indexOf("=") != -1){
+      current = cook[i].split("=");
+      if(current[0].replace(/s/, "") == id){
+        this.cookie = JSON.parse(decodeURIComponent(current[1]));
+        return;
+      }
+    }
+  }
+  this.cookie = {};
+  this.save();
+}
+
+CookieStore.prototype.get = function(key){
+  return this.cookie[key];
+};
+CookieStore.prototype.set = function(key, value){
+  this.cookie[key] = value;
+  this.save();
+  return this;
+};
+CookieStore.prototype.delete = function(key){
+  delete this.cookie[key];
+  this.save();
+  return this;
+};
+
+CookieStore.prototype.save = function(){
+  document.cookie = this.id+"="+encodeURIComponent(JSON.stringify(this.cookie))+";";
+};
+
+//==========Auth Start===================
+
+
+var auth = new CookieStore("auth");
+var is_authed = -1;
+var auth_queueu = [];
+var url = require("url");
+var docuri = url.parse(window.location.href);
+if(docuri.query && docuri.query.code){
+  if(url.query.state != auth.get("state")){
+    errors.push(new Error("Improper State"));
+  }else{
+    getAccess(docuri.query.code);
+  }
+}else if(auth.get("access_token")){
+  is_authed = 1;
+}
+
+var config = {
+  cid: "dafb27cb88db35267e75",
+  yqluri: "store://gdDAnJkTXAuVgzAQ8wboA2"
+};
+
+function login(){
+  var state = Date.now()+"_"+Math.random();
+  auth.set("state", state);
+  window.location.href = "https://github.com/login/oauth/authorize" +
+    "?client_id="+config.cid +
+    "&state="+state;
+}
+function getAccess(code){
+  is_authed = 0;
+  auth.delete("state");
+  jQuery.get(compileYQL([
+    "env \""+config.yqlur+"\"",
+    "select * from github where CODE=\""+code+"\""
+  ])).done(function(results){
+    auth.set("access_token",results.query.results.OAuth.access_token);
+    is_authed = 1;
+    jQuery(".four-zero-three .content").text("You've authenticated!");
+  }).error(function(e){
+    is_authed = -1;
+    errors.push(e);
+  }).finally(function(){
+    while(auth_queue.length){
+      uriAsAuthority.apply(void(0),auth_queue.pop());
+    }
+  });
+}
+
+function compileYQL(query){
+  if(Array.isArray(query)){
+    query = query.join(";");
+  }
+  if(typeof query != "string"){
+    throw new Error("A yql query must be a string");
+  }
+  return "https://query.yahooapis.com/v1/public/yql?q=" +
+    encodeURIComponent(query) +
+    "&diagnostics=true&format=json";
+}
+
+function uriAsAuthority(uri,next){
+  switch(is_authed){
+    case -1: return next(uri);
+    case 0: return auth_queueu.push([uri,next]);
+    case 1:   uri = url.parse(uri);
+      uri.query.access_token = auth.get("access_token");
+      return next(url.format(uri));
+  }
+}
+
+function logout(){
+  auth.delete("access_token");
+  is_authed = -1;
+}
 NodeOsBlog.controller('BlogListCtrl', function ($scope, $http) {
   $scope.uriPath = "/NodeOS/NodeOS/issues";
   $scope.blog = [];
-  $scope.parseMarkdown = function(item,next){
-    $http.post("https://api.github.com/markdown",{text:item.body})
-    .success(function(data){
-      item.bodyHTML = data;
-      next(item);
-    }).error(function(data, status, headers, config) {
-      errors.push({name:"Bad markdown call: "+status, message: data.message});
-      item.bodyHTML = "<pre>"+item.body+"</pre>";
-      next(item);
-    });
-  };
   $scope.last = void(0);
+  $scope.uriAsAuthority = uriAsAuthority;
+  $scope.parseMarkdown = parseMarkdown;
   $scope.loadMore = function(page){
     if($scope.last && $scope.last < page) return;
     var i=0;
     var l=-1;
-    $http.get('https://api.github.com/repos'+$scope.uriPath+'?labels=blog&sort=created&page='+page)
-    .success(function(data,status,headers) {
-      console.log(headers);
-      console.log(headers.link);
-      if(!$scope.last) $scope.last =  headers.link?headers.link.split("=").pop():1;
-      l = data.length;
-      if(i === l) return; //No more
-      var iterator = function(item){
-        $scope.blog.push(item);
-        i++;
-        if(i === l) return;
-        $scope.parseMarkdown(data[i],iterator);
-      };
-      $scope.parseMarkdown(data[0],iterator);
-    }).error(function(data, status, headers, config) {
-      if(status === 403){
-        add403();
-      }else{
-        errors.push({name:"Bad issues list request: "+status, message: data.message});
-      }
+    $scope.uriAsAuthority(
+      'https://api.github.com/repos'+$scope.uriPath+'?labels=blog&sort=updated&page='+page,
+      function(uri){
+console.log("uri");
+      $http.get(uri).success(function(data,status,headers) {
+        console.log(headers);
+        console.log(headers.link);
+        if(!$scope.last) $scope.last =  headers.link?headers.link.split("=").pop():1;
+        l = data.length;
+        if(i === l) return; //No more
+        var iterator = function(item){
+          $scope.blog.push(item);
+          $scope.$apply();
+          i++;
+          if(i === l) return;
+          $scope.parseMarkdown(data[i],iterator);
+        };
+        $scope.parseMarkdown(data[0],iterator);
+      }).error(function(data, status, headers, config) {
+        if(status === 403){
+          add403();
+        }else{
+          errors.push({name:"Bad issues list request: "+status, message: data.message});
+        }
+      });
     });
   };
   $scope.loadMore(1);
