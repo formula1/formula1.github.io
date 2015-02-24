@@ -260,7 +260,7 @@ var config = {
   yqluri: "store://gdDAnJkTXAuVgzAQ8wboA2"
 };
 if(docuri.qs && docuri.qs.code){
-  if(url.query.state != auth.get("state")){
+  if(docuri.query.state != auth.get("state")){
     console.error("improper state");
     errors.push(new Error("Improper State"));
   }else{
