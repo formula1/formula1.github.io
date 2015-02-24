@@ -306,20 +306,13 @@ function compileYQL(query){
 }
 
 function uriAsAuthority(uri,next){
-  switch(is_authed){
-    case -1: return next(uri);
-    case 0: return auth_queue.push([uri,next]);
-    case 1:
-      var query = querystring.parse(url.parse(uri).query);
-      console.log(query);
-      query.access_token = auth.get("access_token");
-      uri.query = querystring.stringify(query);
-      console.log(uri.query);
-      uri.search = "?"+uri.query;
-      console.log(uri.search);
-      console.log(url.format(uri));
-      return next(url.format(uri));
-  }
+  if(is_authed === -1) return next(uri);
+  if(is_authed === 0) return auth_queue.push([uri,next]);
+  uri = url.parse(uri);
+  uri.query = querystring.parse(uri.query);
+  uri.query.access_token = auth.get("access_token");
+  uri.search = "?"+querystring.stringify(uri.query);
+  next(url.format(uri));
 }
 
 function logout(){
