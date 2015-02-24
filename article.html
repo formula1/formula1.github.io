@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css" />
   <link rel="stylesheet" href="http://node-os.com/css/default.css" />
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
-<script type="text/javascript" src="https://gist.githubusercontent.com/formula1/749db638e5b5ac630caf/raw/2e07d087e9991213d40183f270d15f6d54244d39/api.min.js" ></script>
+<script type="text/javascript" src="/api.min.js" ></script>
 <style>
   #articles img{max-width:100%}
   #articles article .title img{width:100px}
@@ -250,8 +250,9 @@ var auth = new CookieStore("auth");
 var is_authed = -1;
 var auth_queueu = [];
 var url = require("url");
+var querystring = require("querystring");
 var docuri = url.parse(window.location.href);
-console.log(docuri.query);
+docuri.qs = querystring.parse(docuri.query);
 if(docuri.query && docuri.query.code){
   if(url.query.state != auth.get("state")){
     errors.push(new Error("Improper State"));
