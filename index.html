@@ -314,7 +314,7 @@ function uriAsAuthority(uri,next){
       console.log(query);
       query.access_token = auth.get("access_token");
       uri.query = querystring.stringify(query);
-      console.log(url.formal(uri));
+      console.log(url.format(uri));
       return next(url.format(uri));
   }
 }
