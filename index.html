@@ -311,7 +311,7 @@ function uriAsAuthority(uri,next){
     case 0: return auth_queue.push([uri,next]);
     case 1:   query = querystring.parse(url.parse(uri).query||"");
       query.access_token = auth.get("access_token");
-      uri.query = querystring.format(query);
+      uri.query = querystring.stringify(query);
       return next(url.format(uri));
   }
 }
