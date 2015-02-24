@@ -172,7 +172,7 @@ function parseMarkdown(item,next){
         errors.push({name:"Bad markdown call: "+response.status, message: data.message});
       }
       item.bodyHTML = "<pre>"+item.body+"</pre>";
-    }).finally(function(){
+    }).always(function(){
       next(item);
     });
   });
@@ -273,10 +273,10 @@ function getAccess(code){
     auth.set("access_token",results.query.results.OAuth.access_token);
     is_authed = 1;
     jQuery(".four-zero-three .content").text("You've authenticated!");
-  }).error(function(e){
+  }).fail(function(e){
     is_authed = -1;
     errors.push(e);
-  }).finally(function(){
+  }).always(function(){
     while(auth_queue.length){
       uriAsAuthority.apply(void(0),auth_queue.pop());
     }
