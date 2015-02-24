@@ -241,20 +241,16 @@ var auth_queue = [];
 var url = require("url");
 var querystring = require("querystring");
 var docuri = url.parse(window.location.href);
-console.log(docuri);
 docuri.qs = querystring.parse(docuri.query);
-console.log(docuri.qs);
 var config = {
   cid: "dafb27cb88db35267e75",
   yqluri: "store://gdDAnJkTXAuVgzAQ8wboA2"
 };
 if(docuri.qs && docuri.qs.code){
   if(docuri.qs.state != auth.get("state")){
-    console.error(docuri.qs.state+" !=  "+auth.get("state"));
     errors.push(new Error("Improper State"));
   }else{
-    console.log("getting access");
-    getAccess(docuri.query.code);
+    getAccess(docuri.qs.code);
   }
 }else if(auth.get("access_token")){
   is_authed = 1;
