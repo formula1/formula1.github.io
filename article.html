@@ -278,7 +278,7 @@ function getAccess(code){
   is_authed = 0;
   auth.delete("state");
   jQuery.get(compileYQL([
-    "env \""+config.yqlur+"\"",
+    "env \""+config.yqluri+"\"",
     "select * from github where CODE=\""+code+"\""
   ])).done(function(results){
     console.log("auth success");
