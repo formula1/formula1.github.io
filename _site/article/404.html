@@ -134,7 +134,11 @@
         };
   }]);
   var errors = [];
+<<<<<<< HEAD:_site/article/404.html
 var has403 = false;
+=======
+
+>>>>>>> 2e05e631b854ac939e916170875370a85352f058:article.html
 function add403(){
   if(has403) return;
   has403 = true;
@@ -143,10 +147,18 @@ function add403(){
     name:"You've hit max data"
   };
   if(is_authed === 1){
+<<<<<<< HEAD:_site/article/404.html
     topush.message = "Apparently, people have been using our app too much...";
   }else{
     topush.message = "If you'd like to continue, please "+
     "<button type='button' class='btn btn-primary' onclick='login()'>Log in</button>";
+=======
+    topush.message = "Apparently, people have been using our app too much..."+
+    "<button onclick='login()'>Log in</button>";
+  }else{
+    topush.message = "If you'd like to continue, please "+
+    "<button onclick='login()'>Log in</button>";
+>>>>>>> 2e05e631b854ac939e916170875370a85352f058:article.html
   }
   errors.push(topush);
 }
