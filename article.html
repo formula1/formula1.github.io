@@ -277,7 +277,7 @@ user.on("access-success",function(token){
   jQuery(".four-zero-three .content").text("You've authenticated!");
 });
 var num = (function(){
-  var temp = document.location.href.split("#")[1];
+  var temp = document.location.href.split("#!")[1];
   if(typeof temp === "number") return temp;
   temp = document.location.href.split("?");
   if(temp.length == 1){
