@@ -318,7 +318,12 @@ NodeOsBlog.controller('BlogListCtrl', function ($scope, $http) {
     var iterator = function(item){
       $scope.blog.push(item);
       i++;
-      if(i === l) return $scope.loadMore(cached[i-1].updated_at);
+      if(i === l){
+        var d = new Date(cached[i-1].updated_at);
+        d.setSeconds(d.getSeconds() + 1);
+        d = d.toISOString();
+        return $scope.loadMore(d);
+      }
       setTimeout(iterator.bind(void(0),cached[i]),1);
     };
     iterator(cached[0]);

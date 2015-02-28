@@ -300,7 +300,8 @@ NodeOsBlog.controller('BlogSingleCtrl', function ($scope, $http) {
   var cached = localStorage.getItem("issue-"+num);
   if(cached){
     cached = JSON.parse(cached);
-    if(Date.now() - cached.updated_at < 1000*60*60*24){
+    var d = new Date(cached.updated_at);
+    if(Date.now() - d.getTime() < 1000*60*60*24){
       console.log("cached");
       $scope.blog.push(cached);
       return;
@@ -351,7 +352,6 @@ NodeOsBlog.controller('CommentListCtrl', function ($scope, $http) {
   $scope.parseMarkdown = parseMarkdown;
 
   $scope.loadMore = function(since){
-    if($scope.last && $scope.last < page) return;
     var i=0;
     var l=-1;
     $scope.user.asAuthority(
@@ -395,7 +395,12 @@ NodeOsBlog.controller('CommentListCtrl', function ($scope, $http) {
     var iterator = function(item){
       $scope.blog.push(item);
       i++;
-      if(i === l) return $scope.loadMore(cached[i-1].created_at);
+      if(i === l){
+        var d = new Date(cached[i-1].created_at);
+        d.setSeconds(d.getSeconds() + 1);
+        d = d.toISOString();
+        return $scope.loadMore(d);
+      }
       setTimeout(iterator.bind(void(0),cached[i]),1);
     };
     iterator(cached[0]);
