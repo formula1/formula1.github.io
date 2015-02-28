@@ -310,7 +310,7 @@ NodeOsBlog.controller('BlogListCtrl', function ($scope, $http) {
     });
   };
   var lastdate;
-  var cached = localStorage.getItem("issue-list-"+num);
+  var cached = localStorage.getItem("issue-list");
   if(cached){
     cached = JSON.parse(cached);
     var i = 0;
