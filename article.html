@@ -276,19 +276,21 @@ user.on("access-error",function(e){
 user.on("access-success",function(token){
   jQuery(".four-zero-three .content").text("You've authenticated!");
 });
-var num = document.location.href.split("#")[1];
-if(!num){
-  num = document.location.href.split("?");
-  if(num.length == 1){
+var num = (function(){
+  var temp = document.location.href.split("#")[1];
+  if(typeof temp === "number") return temp;
+  temp = document.location.href.split("?");
+  if(temp.length == 1){
     return add404();
   }
-  num = require("querystring").parse(num[1]);
-  if(!num._escaped_fragment_){
+  temp = require("querystring").parse(temp[1]);
+  if(!temp._escaped_fragment_){
     return add404();
   }
-  num = num._escaped_fragment_;
-}
+  return temp._escaped_fragment_;
+})();
 NodeOsBlog.controller('BlogSingleCtrl', function ($scope, $http) {
+  if(!num) return;
   $scope.uriPath = "/NodeOS/NodeOS/issues/"+num;
   $scope.user = user;
   $scope.blog = [];
@@ -324,6 +326,7 @@ NodeOsBlog.controller('BlogSingleCtrl', function ($scope, $http) {
   });
 });
 NodeOsBlog.controller('CommentListCtrl', function ($scope, $http) {
+  if(!num) return;
   $scope.uriPath = "/NodeOS/NodeOS/issues/"+num+"/comments";
   $scope.user = user;
   $scope.blog = [];
