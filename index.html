@@ -277,6 +277,7 @@ console.log("uri");
         console.log(headers.link);
         if(!$scope.last) $scope.last =  headers.link?headers.link.split("=").pop():1;
         l = data.length;
+        console.log(data.length);
         if(i === l) return; //No more
         var iterator = function(item){
           $scope.blog.push(item);
