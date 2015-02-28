@@ -56,7 +56,7 @@
     <div class="col-sm-8 col-sm-offset-2">
       <header class="{{item.state}}">
         <h3 class="title">
-          <a href="article.html#{{item.number}}">
+          <a href="article.html#!{{item.number}}">
             {{item.title}}
           </a>
         </h3>
@@ -150,6 +150,13 @@ function add403(){
     "<button onclick='user.login()'>Log in</button>";
   }
   errors.push(topush);
+}
+
+function add404(){
+  errors.push({
+    name: "Your in the wrong place my friend.",
+    message: "<a href='/'>Heres a hand, we'll get you back on the right track</a>"
+  });
 }
 
 NodeOsBlog.controller('ErrorListCtrl', function($scope){
@@ -269,9 +276,20 @@ user.on("access-error",function(e){
 user.on("access-success",function(token){
   jQuery(".four-zero-three .content").text("You've authenticated!");
 });
-var hash = document.location.toString().split("#")[1];
 NodeOsBlog.controller('BlogSingleCtrl', function ($scope, $http) {
-  $scope.uriPath = "/NodeOS/NodeOS/issues/"+hash;
+  var num = document.location.href.split("#")[1];
+  if(!num){
+    num = document.location.href.split("?");
+    if(num.length == 1){
+      return add404();
+    }
+    num = require("querystring").parse(num[1]);
+    if(!num._escaped_fragment_){
+      return add404();
+    }
+    num = num._escaped_fragment_;
+  }
+  $scope.uriPath = "/NodeOS/NodeOS/issues/"+num;
   $scope.user = user;
   $scope.blog = [];
   $scope.parseMarkdown = parseMarkdown;

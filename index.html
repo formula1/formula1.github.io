@@ -56,7 +56,7 @@
     <div class="col-sm-8 col-sm-offset-2">
       <header class="{{item.state}}">
         <h3 class="title">
-          <a href="article.html#{{item.number}}">
+          <a href="article.html#!{{item.number}}">
             {{item.title}}
           </a>
         </h3>
@@ -64,7 +64,7 @@
       </header>
       <div class="content" ng-bind-html="item.bodyHTML | to_trusted"></div>
       <footer>
-        <a href="http://node-os.com/blog/{{item.number}}" class="comments">
+        <a href="article.html#!{{item.number}}" class="comments">
           There are {{item.comments}} comments.
         </a>
       </footer>
@@ -139,6 +139,13 @@ function add403(){
     "<button onclick='user.login()'>Log in</button>";
   }
   errors.push(topush);
+}
+
+function add404(){
+  errors.push({
+    name: "Your in the wrong place my friend.",
+    message: "<a href='/'>Heres a hand, we'll get you back on the right track</a>"
+  });
 }
 
 NodeOsBlog.controller('ErrorListCtrl', function($scope){
