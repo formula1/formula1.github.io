@@ -249,7 +249,13 @@ window.user = new AuthProvider(
   config.cid,
   yql_access(config.yqluri)
 );
-
+user.on("parse-error",function(e){
+  errors.push({
+    class:"four-zero-three",
+    name:"You've failed authorization",
+    message: e.message
+  });
+});
 user.on("access-error",function(e){
   errors.push({
     class:"four-zero-three",
