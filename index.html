@@ -276,7 +276,7 @@ NodeOsBlog.controller('BlogListCtrl', function ($scope, $http) {
     var i=0;
     var l=-1;
     $scope.user.asAuthority(
-      'https://api.github.com/repos'+$scope.uriPath+'?labels=blog&sort=updated&since='+since,
+      'https://api.github.com/repos'+$scope.uriPath+'?labels=blog&sort=updated'+(since?'&since='+since:""),
       function(uri){
       $http.get(uri).success(function(data,status,headers) {
         console.log(headers);
