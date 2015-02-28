@@ -243,6 +243,8 @@ var config = {
   yqluri: "store://gdDAnJkTXAuVgzAQ8wboA2"
 };
 
+var AuthProvider = require("AuthProvider");
+
 window.user = new AuthProvider(
   config.cid,
   yql_access(config.yqluri)
