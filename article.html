@@ -250,6 +250,10 @@ window.user = new AuthProvider(
   yql_access(config.yqluri)
 );
 
+for(var i in user){
+  if(typeof user[i] == "function") console.log(i);
+}
+
 user.on("access-error",function(e){
   errors.push({
     class:"four-zero-three",
