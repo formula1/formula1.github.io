@@ -258,7 +258,6 @@ NodeOsBlog.controller('BlogListCtrl', function ($scope, $http) {
   $scope.user = user;
   $scope.blog = [];
   $scope.last = void(0);
-  $scope.uriAsAuthority = uriAsAuthority;
   $scope.parseMarkdown = parseMarkdown;
   $scope.loadMore = function(page){
     if($scope.last && $scope.last < page) return;

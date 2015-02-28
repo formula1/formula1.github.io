@@ -269,7 +269,6 @@ NodeOsBlog.controller('BlogSingleCtrl', function ($scope, $http) {
   $scope.uriPath = "/NodeOS/NodeOS/issues/"+hash;
   $scope.user = user;
   $scope.blog = [];
-  $scope.uriAsAuthority = uriAsAuthority;
   $scope.parseMarkdown = parseMarkdown;
 
   var markdown = require("markdown").markdown;
@@ -306,7 +305,6 @@ NodeOsBlog.controller('CommentListCtrl', function ($scope, $http) {
   $scope.user = user;
   $scope.blog = [];
   $scope.last = void(0);
-  $scope.uriAsAuthority = uriAsAuthority;
   $scope.parseMarkdown = parseMarkdown;
   $scope.loadMore = function(page){
     if($scope.last && $scope.last < page) return;
