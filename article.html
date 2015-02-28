@@ -301,6 +301,7 @@ NodeOsBlog.controller('BlogSingleCtrl', function ($scope, $http) {
   if(cached){
     cached = JSON.parse(cached);
     if(Date.now() - cached.updated_at < 1000*60*60*24){
+      console.log("cached");
       $scope.blog.push(cached);
       return;
     }
@@ -387,6 +388,8 @@ NodeOsBlog.controller('CommentListCtrl', function ($scope, $http) {
   var lastdate;
   var cached = localStorage.getItem("issue-comments-"+num);
   if(cached){
+    console.log("cached");
+    cached = JSON.parse(cached);
     var i = 0;
     var l = cached.length;
     var iterator = function(item){
