@@ -317,7 +317,6 @@ NodeOsBlog.controller('BlogListCtrl', function ($scope, $http) {
     var l = cached.length;
     var iterator = function(item){
       $scope.blog.push(item);
-      $scope.$apply();
       i++;
       if(i === l) return $scope.loadMore(cached[i-1].updated_at);
       setTimeout(iterator.bind(void(0),cached[i]),1);
