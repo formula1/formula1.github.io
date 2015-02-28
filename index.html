@@ -122,8 +122,11 @@ NodeOsBlog.filter('to_trusted', ['$sce', function($sce){
       };
 }]);
 var errors = [];
+var has403 = false;
 
 function add403(){
+  if(has403) return;
+  has403 = true;
   var topush = {
     class:"four-zero-three",
     name:"You've hit max data"
@@ -165,7 +168,7 @@ function parseMarkdown(item,next){
       data:item.body
     }).done(function(data){
       item.bodyHTML = data;
-    }).fail(function(response, type, title, config) {
+    }).fail(function(response, textStatus,data) {
       if(response.status === 403){
         add403();
       }else{
