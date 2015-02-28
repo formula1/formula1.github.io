@@ -133,7 +133,7 @@ function add403(){
   };
   if(user.isLoggedIn){
     topush.message = "Apparently, people have been using our app too much..."+
-    "<button onclick='login()'>Log in</button>";
+    "<button onclick='user.login()'>Log in</button>";
   }else{
     topush.message = "If you'd like to continue, please "+
     "<button onclick='user.login()'>Log in</button>";
