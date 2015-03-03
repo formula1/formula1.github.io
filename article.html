@@ -342,6 +342,7 @@ jQuery(function($){
 });
 
 function addError(error){
+  console.log(error);
   errorHandler.add({name:error.toString(), message:error.stack});
 }
 
