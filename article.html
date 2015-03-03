@@ -138,7 +138,7 @@ var in_memory = {};
 
 function cacheOrUriIterator(cachename, itemCBs){
   var cached = localStorage.getItem(cachename);
-  if(!cached || cached === "undefined" || cached === "[]" || true/* */){
+  if(!cached || cached === "undefined" || cached === "[]" ){
     in_memory[cachename] = [];
     return UriIterator(cachename, void(0), itemCBs);
   }
