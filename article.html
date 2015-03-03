@@ -170,7 +170,7 @@ function ISOplus1(iso){
 
 function cacheOrUriIterator(cachename, itemCBs){
   var cached = localStorage.getItem(cachename);
-  if(!cached){
+  if(!cached || cached === "undefined"){
     return UriIterator(cachename, void(0), itemCBs);
   }
   console.log(cached);
