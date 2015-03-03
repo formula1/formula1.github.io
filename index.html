@@ -58,17 +58,17 @@
 <script type="text/html" class="template bloglist">
     <article class="row">
       <div class="col-sm-8 col-sm-offset-2">
-        <header class="{{item.state}}">
+        <header class="{{state}}">
           <h3 class="title">
-            <a href="article.html#!{{item.number}}">
+            <a href="article.html#!{{number}}">
               {{item.title}}
             </a>
           </h3>
-          <a href="{{item.html_url}}">View on Github</a>
+          <a href="{{html_url}}">View on Github</a>
         </header>
         <div class="content">{{item.bodyHTML}}</div>
         <footer>
-          <a href="article.html#!{{item.number}}" class="comments">
+          <a href="article.html#!{{number}}" class="comments">
             There are {{item.comments}} comments.
           </a>
         </footer>

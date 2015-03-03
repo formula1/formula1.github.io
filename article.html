@@ -58,15 +58,15 @@
 <script type="text/html" class="template blogsingle" >
   <article class="row">
     <div class="col-sm-8 col-sm-offset-2">
-      <header class="{{item.state}}">
+      <header class="{{state}}">
         <h3 class="title">
-          <a href="article.html#!{{item.number}}">
+          <a href="article.html#!{{number}}">
             {{item.title}}
           </a>
         </h3>
-        <a href="{{item.html_url}}">View on Github</a>
+        <a href="{{html_url}}">View on Github</a>
       </header>
-      <div class="content" >{{item.bodyHTML}}</div>
+      <div class="content" >{{bodyHTML}}</div>
     </div>
   </article>
 </script>
@@ -75,16 +75,16 @@
 <script type="text/html" class="template comments">
   <article class="row">
     <div class="col-sm-8 col-sm-offset-2">
-      <header class="{{item.state}}">
+      <header class="{{state}}">
         <h3 class="title">
-          <a href="{{item.user.html_url}}">
-            <img src="{{item.user.avatar_url}}" />
+          <a href="{{user.html_url}}">
+            <img src="{{user.avatar_url}}" />
             <span>{{item.user.login}}</span>
           </a>
         </h3>
-        <a href="{{item.html_url}}">View on Github</a>
+        <a href="{{html_url}}">View on Github</a>
       </header>
-      <div class="content">{{item.bodyHTML}}</div>
+      <div class="content">{{bodyHTML}}</div>
     </div>
   </article>
 </script>
