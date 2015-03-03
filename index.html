@@ -322,7 +322,9 @@ jQuery(function($){
         message: message+"<pre>"+error.stack+"</pre>"
       });
     }
-    oldwinerr.call(oldwinerr, message, filename, lineno, colno, error );
+    if(oldwinerr){
+      oldwinerr(message, filename, lineno, colno, error );
+    }
   };
 });
 
