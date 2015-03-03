@@ -206,6 +206,7 @@ function UriIterator(cachename, timestamp, itemCBs){
     }).fail(itemCBs.error);
   });
 }
+var async = require("async");
 function Template(template,contain,unique){
   this.template = Handlebars.compile(jQuery(template).html());
   this.contain = jQuery(contain);
