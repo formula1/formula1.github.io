@@ -119,7 +119,10 @@
 <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js" ></script>
 <!-- START: BIND DATA TO VIEW -->
 <script type="text/javascript">
-  function getCachedOrAjax(cachename){
+  var async = require("async");
+
+
+function getCachedOrAjax(cachename){
   if(!(this instanceof getCachedOrUri)) return new this(cachename,uriname);
   var cbs = this.cbs = {};
   setTimeout(function(){
@@ -194,8 +197,6 @@ function UriIterator(cachename, timestamp, itemCBs){
     }).fail(itemCBs.error);
   });
 }
-var async = require("async");
-
 function Template(template,contain,unique){
   this.template = Handlebars.compile(jQuery(template).html());
   this.contain = jQuery(contain);
