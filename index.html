@@ -415,7 +415,8 @@ jQuery(function($){
         user.asAuthority(uri,next);
       },
       prep: function(item, next){
-        item.timestamp = (new Date(item.created_at)).getTime();
+        item.timestamp = new Date(item.created_at);
+        item.timestamp = item.timestamp.getTime();
         parseMarkdown(item,next);
       },
       ready: function(item,next){
