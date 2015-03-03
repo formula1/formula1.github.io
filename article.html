@@ -224,7 +224,6 @@ function Template(template,contain,unique){
 }
 
 Template.prototype.add = function(item){
-  console.log(item);
   if(item.class && typeof this.unique[item.class] != "undefined"){
     if(this.unique[item.class]) return;
     this.unique[item.class] = true;
