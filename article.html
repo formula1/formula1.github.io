@@ -37,13 +37,13 @@
   <div class="container error">
 </div>
 <script  type="text/html" class="template error">
-  <article class="row" data-unique="{{error.unique}}">
-    <div class="col-sm-8 col-sm-offset-2 {{error.class}}" >
+  <article class="row" data-unique="{{unique}}">
+    <div class="col-sm-8 col-sm-offset-2 {{class}}" >
       <header class="alert alert-danger" role="alert">
-        <h3 class="title">{{error.name}}</h3>
+        <h3 class="title">{{name}}</h3>
         <a href="#" class="remove" > To remove this message, click here</p>
       </header>
-      <div class="content" ng-bind-html="error.message | to_trusted"></div>
+      <div class="content">{{message}}</div>
       <footer>
         Don't worry, it probably was not your fault... probably....
         <br/><br/>
@@ -329,7 +329,6 @@ jQuery(function($){
   );
   var oldwinerr = window.onerror;
   window.onerror = function ( message, filename, lineno, colno, error ){
-    console.log(error);
     if ( error !== undefined && error.hasOwnProperty( "name" ) && error.name == "Magic"){
       errorHandler.add({
         name:"Uncaught Error: "+error.name,
@@ -343,7 +342,6 @@ jQuery(function($){
 });
 
 function addError(error){
-  console.log(error);
   if(error.status){
     errorHandler.add({name:"Ajax: "+error.status, message:error.responseText});
   }else{
