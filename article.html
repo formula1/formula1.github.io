@@ -514,21 +514,6 @@ jQuery(function($){
     }
   );
 });
-
-
-user.asAuthority(
-if(since){
-  var querystring = require("querystring");
-  var query = uri.split("?");
-  if(query.length === 1 ){
-    query.push({});
-  }else{
-    query[1] = querystring.parse(query[1]);
-  }
-  query[1].since = since;
-  query[1] = querystring.stringify(query[1]);
-  uri = query.join("?");
-}
 </script>
 <!-- END: BIND DATA TO VIEW -->
 </body>
