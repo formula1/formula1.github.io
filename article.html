@@ -138,11 +138,11 @@ var in_memory = {};
 
 function cacheOrUriIterator(cachename, itemCBs){
   var cached = localStorage.getItem(cachename);
-  if(!cached || cached === "undefined" || cached === "[]"){
+  if(!cached || cached === "undefined" || cached === "[]" || true/* */){
     in_memory[cachename] = [];
     return UriIterator(cachename, void(0), itemCBs);
   }
-  console.log(cached);
+  console.log("cached");
   cached = JSON.parse(cached);
   if(!Array.isArray(cached)){
     cached = [cached];
@@ -202,8 +202,6 @@ Template.prototype.add = function(item){
     this.unique[item.class] = true;
   }
   console.log("appending");
-  console.log(this.template(item));
-  console.log(this.contain.size());
   this.contain.append(this.template(item));
 };
 
