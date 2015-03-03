@@ -191,6 +191,7 @@ function cacheOrUriIterator(cachename, itemCBs){
 function UriIterator(cachename, timestamp, itemCBs){
   itemCBs.timestamp2URI(timestamp,function(uri){
     jQuery.get(uri).done(function(data){
+      console.log(Array.isArray(data));
       if(!Array.isArray(data)){
         data = [data];
       }
@@ -205,7 +206,11 @@ function UriIterator(cachename, timestamp, itemCBs){
         }catch(e){
           return itemCBs.error(e);
         }
-        itemCBs.done(data[data.length -1].timestamp);
+        if(data.length === 0){
+          itemCBs.done(timestamp);
+        }else{
+          itemCBs.done(data[data.length -1].timestamp);
+        }
       });
     }).fail(itemCBs.error);
   });
