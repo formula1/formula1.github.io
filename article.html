@@ -344,7 +344,11 @@ jQuery(function($){
 
 function addError(error){
   console.log(error);
-  errorHandler.add({name:error.toString(), message:error.stack});
+  if(error.status){
+    errorHandler.add({name:"Ajax: "+error.status, message:error.responseText});
+  }else{
+    errorHandler.add({name:error.toString(), message:error.stack});
+  }
 }
 
 function add403(){
