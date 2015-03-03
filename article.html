@@ -53,6 +53,65 @@
     </div>
   </article>
 </script>
+<div  id="westoredata">
+  <h3><a href="#">We store data on your computer</a></h3>
+  <div style="display:none">
+    <h5>We store your access token we retrieve from github on your computer as a cookie.</h5>
+    <br /><a href="https://github.com/formula1/AuthProvider/blob/master/index.js#L87">
+      See the Code
+    </a>
+    <p>
+      This is done so that we can access the github api in a verified manner.
+      This is purely optional and we never use your user information.
+      This is done to avoid server operations.
+    </p>
+    <br/><br/>
+    <h5>We store data we get from github on your available local storage</h5>
+    <br><a href="https://github.com/formula1/NodeOS-Blog/blob/master/html/footerjs/cacheOrLoad.js#L38">
+      See the Code
+    </a>
+    <p>
+      This is done so that you may avoid as many calls to github as possible.
+      Without this, you would have to request github every time you wanted to
+      view a page. This is not optional.
+    </p>
+  </div>
+</div>
+<div class="container blogsingle" >
+</div>
+<script type="text/html" class="template blogsingle" >
+  <article class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <header class="{{state}}">
+        <h3 class="title">
+          <a href="article.html#!{{number}}">
+            {{title}}
+          </a>
+        </h3>
+        <a href="{{html_url}}">View on Github</a>
+      </header>
+      <div class="content" >{{{bodyHTML}}}</div>
+    </div>
+  </article>
+</script>
+<div class="container comments" >
+</div>
+<script type="text/html" class="template comments">
+  <article class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <header class="{{state}}">
+        <h3 class="title">
+          <a href="{{user.html_url}}">
+            <img src="{{user.avatar_url}}" />
+            <span>{{user.login}}</span>
+          </a>
+        </h3>
+        <a href="{{html_url}}">View on Github</a>
+      </header>
+      <div class="content">{{{bodyHTML}}}</div>
+    </div>
+  </article>
+</script>
 </section>
 <!-- END: ISSUES ITEM TEMPLATE -->
 
