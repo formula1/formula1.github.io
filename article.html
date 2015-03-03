@@ -358,7 +358,6 @@ NodeOsBlog.controller('CommentListCtrl', function ($scope, $http) {
       'https://api.github.com/repos'+$scope.uriPath+(since?'?since='+since:""),
       function(uri){
       $http.get(uri).success(function(data,status,headers) {
-        console.log(data);
         if(!$scope.last) $scope.last =  headers.link?headers.link.split("=").pop():1;
         l = data.length;
         if(i === l) return; //No more
@@ -401,7 +400,7 @@ NodeOsBlog.controller('CommentListCtrl', function ($scope, $http) {
         var d = new Date(cached[i-1].created_at);
         d.setSeconds(d.getSeconds() + 1);
         d = d.toISOString();
-//        return $scope.loadMore(d);
+        return $scope.loadMore(d);
       }
       setTimeout(iterator.bind(void(0),cached[i]),1);
     };
