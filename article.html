@@ -391,6 +391,7 @@ NodeOsBlog.controller('CommentListCtrl', function ($scope, $http) {
   if(cached){
     console.log("cached");
     cached = JSON.parse(cached);
+    console.log(cached);
     var i = 0;
     var l = cached.length;
     var iterator = function(item){
