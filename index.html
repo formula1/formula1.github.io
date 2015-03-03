@@ -195,6 +195,7 @@ function UriIterator(cachename, timestamp, itemCBs){
   });
 }
 var async = require("async");
+
 function Template(template,contain,unique){
   this.template = Handlebars.compile(jQuery(template).html());
   this.contain = jQuery(contain);
@@ -209,6 +210,7 @@ function Template(template,contain,unique){
 }
 
 Template.prototype.add = function(item){
+  console.log(item);
   if(item.class && typeof this.unique[item.class] != "undefined"){
     if(this.unique[item.class]) return;
     this.unique[item.class] = true;
@@ -217,6 +219,7 @@ Template.prototype.add = function(item){
 };
 
 Template.prototype.remove = function(item){
+  console.log(item);
   var art = $(item).closest("article");
   var u = art.attr("data-unique");
   if(u){
