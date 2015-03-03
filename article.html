@@ -53,41 +53,6 @@
     </div>
   </article>
 </script>
-<div class="container blogsingle" >
-</div>
-<script type="text/html" class="template blogsingle" >
-  <article class="row">
-    <div class="col-sm-8 col-sm-offset-2">
-      <header class="{{state}}">
-        <h3 class="title">
-          <a href="article.html#!{{number}}">
-            {{title}}
-          </a>
-        </h3>
-        <a href="{{html_url}}">View on Github</a>
-      </header>
-      <div class="content" >{{{bodyHTML}}}</div>
-    </div>
-  </article>
-</script>
-<div class="container comments" >
-</div>
-<script type="text/html" class="template comments">
-  <article class="row">
-    <div class="col-sm-8 col-sm-offset-2">
-      <header class="{{state}}">
-        <h3 class="title">
-          <a href="{{user.html_url}}">
-            <img src="{{user.avatar_url}}" />
-            <span>{{user.login}}</span>
-          </a>
-        </h3>
-        <a href="{{html_url}}">View on Github</a>
-      </header>
-      <div class="content">{{{bodyHTML}}}</div>
-    </div>
-  </article>
-</script>
 </section>
 <!-- END: ISSUES ITEM TEMPLATE -->
 
@@ -158,7 +123,6 @@ function cacheOrUriIterator(cachename, itemCBs){
 function UriIterator(cachename, timestamp, itemCBs){
   itemCBs.timestamp2URI(timestamp,function(uri){
     jQuery.get(uri).done(function(data){
-      console.log(Array.isArray(data));
       if(!Array.isArray(data)){
         data = [data];
       }
@@ -183,6 +147,13 @@ function UriIterator(cachename, timestamp, itemCBs){
     }).fail(itemCBs.error);
   });
 }
+jQuery(function($){
+  $("#westoredata>h3 a").click(function(e){
+    e.preventDefault();
+    $("#westoredata>div").toggle();
+  });
+});
+
 function Template(template,contain,unique){
   this.template = Handlebars.compile(jQuery(template).html());
   this.contain = jQuery(contain);
@@ -205,9 +176,9 @@ Template.prototype.add = function(item){
   this.contain.append(this.template(item));
 };
 
-Template.prototype.remove = function(item){
-  console.log(item);
-  var art = $(item).closest("article");
+Template.prototype.remove = function(e){
+  e.preventDefault();
+  var art = $(this).closest("article");
   var u = art.attr("data-unique");
   if(u){
     this.unique[u] = false;
