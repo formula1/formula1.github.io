@@ -358,6 +358,7 @@ NodeOsBlog.controller('CommentListCtrl', function ($scope, $http) {
       'https://api.github.com/repos'+$scope.uriPath+(since?'?since='+since:""),
       function(uri){
       $http.get(uri).success(function(data,status,headers) {
+        console.log(data);
         if(!$scope.last) $scope.last =  headers.link?headers.link.split("=").pop():1;
         l = data.length;
         if(i === l) return; //No more
