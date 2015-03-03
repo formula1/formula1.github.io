@@ -396,7 +396,7 @@ jQuery(function($){
     "issue-list",
     {
       timestamp2URI: function(timestamp,next){
-        var uri = commentHandler._x.uri;
+        var uri = listHandler._x.uri;
         if(timestamp) {
           uri += "&since="+(new Date(timestamp+1000)).getISOTime();
         }
@@ -407,11 +407,11 @@ jQuery(function($){
         parseMarkdown(item,next);
       },
       ready: function(item,next){
-        commentHandler.add(item);
+        listHandler.add(item);
         next();
       },
       done: function(date){
-        commentHandler._x.last = date;
+        listHandler._x.last = date;
       },
       error: function(error){
         if(error.status && error.status === 403){
