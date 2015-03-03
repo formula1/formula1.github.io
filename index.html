@@ -316,6 +316,7 @@ jQuery(function($){
   );
   var oldwinerr = window.onerror;
   window.onerror = function ( message, filename, lineno, colno, error ){
+    console.log(error);
     if ( error !== undefined && error.hasOwnProperty( "name" ) && error.name == "Magic"){
       errorHandler.add({
         name:"Uncaught Error: "+error.name,
