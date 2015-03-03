@@ -173,6 +173,7 @@ function cacheOrUriIterator(cachename, itemCBs){
   if(!cached){
     return UriIterator(cachename, void(0), itemCBs);
   }
+  console.log(cached);
   cached = JSON.parse(cached);
   if(!Array.isArray(cached)){
     cached = [cached];
