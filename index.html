@@ -144,7 +144,7 @@ getCachedOrAjax.prototype.done = function(cb){
   this.cbs.done = cb;
   return this;
 };
-getCachedOrUri.prototype.fail = function(cb){
+getCachedOrAjax.prototype.fail = function(cb){
   this.cbs.error = cb;
   return this;
 };
