@@ -229,6 +229,7 @@ Template.prototype.add = function(item){
     if(this.unique[item.class]) return;
     this.unique[item.class] = true;
   }
+  console.log("appending");
   this.contain.append(this.template(item));
 };
 
@@ -460,7 +461,7 @@ jQuery(function($){
         next();
       },
       done: function(date){
-        commentHandler._x.last = date;
+        singleHandler._x.last = date;
       },
       error: function(error){
         if(error.status && error.status === 403){
@@ -500,7 +501,7 @@ jQuery(function($){
       },
       ready: function(item,next){
         commentHandler.add(item);
-        next();
+        setTimeout(next,1);
       },
       done: function(date){
         commentHandler._x.last = date;

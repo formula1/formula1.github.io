@@ -216,6 +216,7 @@ Template.prototype.add = function(item){
     if(this.unique[item.class]) return;
     this.unique[item.class] = true;
   }
+  console.log("appending");
   this.contain.append(this.template(item));
 };
 
@@ -418,7 +419,7 @@ jQuery(function($){
       },
       ready: function(item,next){
         listHandler.add(item);
-        next();
+        setTimeout(next,1);
       },
       done: function(date){
         listHandler._x.last = date;
