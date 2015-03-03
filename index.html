@@ -127,20 +127,20 @@
   },1);
 }
 
-getCachedOrUri.prototype.timestamp2URI = function(cb){
+getCachedOrAjax.prototype.timestamp2URI = function(cb){
   this.cbs.uri = cb;
   return this;
 };
 
-getCachedOrUri.prototype.prep = function(cb){
+getCachedOrAjax.prototype.prep = function(cb){
   this.cbs.prep = cb;
   return this;
 };
-getCachedOrUri.prototype.item = function(cb){
+getCachedOrAjax.prototype.item = function(cb){
   this.cbs.ready = cb;
   return this;
 };
-getCachedOrUri.prototype.done = function(cb){
+getCachedOrAjax.prototype.done = function(cb){
   this.cbs.done = cb;
   return this;
 };
