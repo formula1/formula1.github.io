@@ -171,6 +171,7 @@ function cacheOrUriIterator(cachename, itemCBs){
   async.eachSeries(cached,
     itemCBs.ready,
   function(e,results){
+    console.log(cached);
     UriIterator(cachename, cached.pop().timestamp, itemCBs);
   });
 }
