@@ -134,42 +134,7 @@
 <script type="text/javascript">
   var async = require("async");
 
-
-function getCachedOrAjax(cachename){
-  if(!(this instanceof getCachedOrUri)) return new this(cachename,uriname);
-  var cbs = this.cbs = {};
-  setTimeout(function(){
-    cacheOrUriIterator(cachename, cbs);
-  },1);
-}
-
-getCachedOrAjax.prototype.timestamp2URI = function(cb){
-  this.cbs.uri = cb;
-  return this;
-};
-
-getCachedOrAjax.prototype.prep = function(cb){
-  this.cbs.prep = cb;
-  return this;
-};
-getCachedOrAjax.prototype.item = function(cb){
-  this.cbs.ready = cb;
-  return this;
-};
-getCachedOrAjax.prototype.done = function(cb){
-  this.cbs.done = cb;
-  return this;
-};
-getCachedOrAjax.prototype.fail = function(cb){
-  this.cbs.error = cb;
-  return this;
-};
-
-function ISOplus1(iso){
-  var d = new Date(iso);
-  d.setSeconds(d.getSeconds() + 1);
-  return d.toISOString();
-}
+var in_memory = {};
 
 function cacheOrUriIterator(cachename, itemCBs){
   var cached = localStorage.getItem(cachename);
@@ -184,8 +149,8 @@ function cacheOrUriIterator(cachename, itemCBs){
   async.eachSeries(cached,
     itemCBs.ready,
   function(e,results){
-    console.log(cached);
-    UriIterator(cachename, cached.pop().timestamp, itemCBs);
+    in_memory[cachename] = cached;
+    UriIterator(cachename, cached[cached.length - 1].timestamp, itemCBs);
   });
 }
 
@@ -202,8 +167,9 @@ function UriIterator(cachename, timestamp, itemCBs){
         });
       },function(err,results){
         if(err) return itemCBs.error(err);
+        in_memory[cachename] = in_memory[cachename].concat(data);
         try{
-          localStorage.setItem(cachename, JSON.stringify(data));
+          localStorage.setItem( cachename,JSON.stringify(in_memory[cachename]) );
         }catch(e){
           return itemCBs.error(e);
         }
