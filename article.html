@@ -201,6 +201,8 @@ Template.prototype.add = function(item){
     this.unique[item.class] = true;
   }
   console.log("appending");
+  console.log(this.template(item));
+  console.log(this.contain.size());
   this.contain.append(this.template(item));
 };
 
