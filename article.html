@@ -351,7 +351,7 @@ function addError(error){
   if(error.status){
     errorHandler.add({name:"Ajax: "+error.status, message:error.responseText});
   }else{
-    errorHandler.add({name:error.toString(), message:error.stack});
+    errorHandler.add({name:error.name, message:error.stack});
   }
 }
 
