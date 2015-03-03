@@ -188,7 +188,7 @@ function UriIterator(cachename, timestamp, itemCBs){
       },function(err,results){
         if(err) return itemCBs.error(err);
         try{
-          localStorage.setItem(cachename, JSON.stringify(results));
+          localStorage.setItem(cachename, JSON.stringify(data));
         }catch(e){
           return itemCBs.error(e);
         }
