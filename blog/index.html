@@ -1,0 +1,37 @@
+---
+layout: blog
+title: Node OS Blog
+head: blog-head.html
+foot: blog-foot.html
+footscripts:
+    - js/blog/cacheOrLoad.js
+    - js/blog/template.js
+    - js/blog/utility.js
+    - js/blog/error.js
+    - js/blog/user.js
+    - js/blog/bloglist.js
+---
+<div class="container bloglist">
+</div>
+{% raw %}
+<script type="text/html" class="template bloglist">
+    <article class="row">
+      <div class="col-sm-8 col-sm-offset-2">
+        <header class="{{state}}">
+          <h3 class="title">
+            <a href="article.html#!{{number}}">
+              {{title}}
+            </a>
+          </h3>
+          <a href="{{html_url}}">View on Github</a>
+        </header>
+        <div class="content">{{{bodyHTML}}}</div>
+        <footer>
+          <a href="article.html#!{{number}}" class="comments">
+            There are {{comments}} comments.
+          </a>
+        </footer>
+      </div>
+    </article>
+</script>
+{% endraw %}
