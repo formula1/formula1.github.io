@@ -24,3 +24,15 @@ user.on("access-error",function(e){
     message: "You can always try again"
   });
 });
+$("#westoredata .buttons a.logtoggle").click(function(e){
+  e.preventDefault();
+  if(!user.isLoggedIn){
+    return user.login();
+  }
+  user.logout();
+  $(this).text("Log In");
+});
+user.on("access-success",function(token){
+  console.log("access was successful");
+  $("#westoredata .buttons a.logtoggle").text("Log Out");
+});
