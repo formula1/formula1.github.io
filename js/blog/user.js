@@ -24,6 +24,3 @@ user.on("access-error",function(e){
     message: "You can always try again"
   });
 });
-user.on("access-success",function(token){
-  jQuery(".four-zero-three .content").text("You've authenticated!");
-});

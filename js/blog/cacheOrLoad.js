@@ -1,14 +1,12 @@
 var async = require("async");
 
 var in_memory = {};
-
+var cache_on = true;
 function cacheOrUriIterator(cachename, itemCBs){
   var cached = localStorage.getItem(cachename);
-  if(!cached || cached === "undefined" || cached === "[]" ){
-    in_memory[cachename] = [];
+  if(!cached || cached === "undefined" || cached === "[]" || !cache_on){
     return UriIterator(cachename, void(0), itemCBs);
   }
-  console.log("cached");
   cached = JSON.parse(cached);
   if(!Array.isArray(cached)){
     cached = [cached];
@@ -33,13 +31,15 @@ function UriIterator(cachename, timestamp, itemCBs){
         });
       },function(err,results){
         if(err) return itemCBs.error(err);
-        in_memory[cachename] = in_memory[cachename].concat(data);
-        try{
-          localStorage.setItem( cachename,JSON.stringify(in_memory[cachename]) );
-        }catch(e){
-          return itemCBs.error(e);
+        if(cache_on){
+          in_memory[cachename] = (in_memory[cachename]||[]).concat(data);
+          try{
+            localStorage.setItem( cachename,JSON.stringify(in_memory[cachename]) );
+          }catch(e){
+            return itemCBs.error(e);
+          }
+          delete in_memory[cachename];
         }
-        delete in_memory[cachename];
         if(data.length === 0){
           itemCBs.done(timestamp);
         }else{
