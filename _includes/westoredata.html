@@ -36,7 +36,7 @@
     </div>
     <div class="buttons col-xs-2">
       <p><a class="btn btn-primary btn-lg cachetoggle" href="#" role="button">Don't Cache</a></p>
-      <p><a class="btn btn-primary btn-lg hide" href="#" role="button">Hide Me</a></p>
+      <p><a class="btn btn-primary btn-lg hideme" href="#" role="button">Hide Me</a></p>
     </div>
   </div>
 </div>
@@ -46,7 +46,7 @@ jQuery(function($){
     e.preventDefault();
     $("#westoredata .info .more").toggle();
   });
-  $("#westoredata .buttons a.hide").click(function(e){
+  $("#westoredata .buttons a.hideme").click(function(e){
     e.preventDefault();
     $("#westoredata").toggle();
   });
