@@ -19,7 +19,9 @@
   {% include footer.html %}
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   {% if page.foot %}
-    {% include {{page.foot}} %}
+    <script type="text/javascript">
+      {% include {{page.foot}} %}
+    </script>
   {% endif %}
 </body>
 </html>
