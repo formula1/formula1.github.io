@@ -10481,6 +10481,8 @@ AuthProvider.prototype.parseURL = function(){
     ux[this.info.ux].code.call(this,query.code,function(){
       this.getAccess(query.code);
     });
+  }else{
+    this.getAccess(query.code);
   }
 };
 
