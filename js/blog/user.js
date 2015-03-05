@@ -19,13 +19,6 @@ user.on("error",function(e){
     message: e
   });
 });
-var login = document.getElementById("login");
-login.onclick = function(){
-  if(!user.isLoggedIn){
-    return user.login();
-  }
-  user.logout();
-};
 user.on("login",function(token){
   console.log("access was successful");
   $("#westoredata .buttons a.logtoggle").text("Log Out");
