@@ -5,24 +5,34 @@ var config = {
 };
 
 var AuthProvider = require("AuthProvider");
-
-window.user = new AuthProvider(
-  config.cid,
-  yql_access(config.yqluri)
-);
-user.on("parse-error",function(e){
+AuthProvider.init({
+  github:{
+    client_id:config.cid,
+    access_retriever:yql_access(config.yqluri)
+  }
+});
+window.user = new AuthProvider();
+user.on("error",function(e){
   addError({
     class:"four-zero-three",
-    name:"You've failed authorization",
+    name:"Login Error",
     message: e
   });
 });
-user.on("access-error",function(e){
-  addError({
-    class:"four-zero-three",
-    name:"You've failed authorization",
-    message: "You can always try again"
-  });
+var login = document.getElementById("login");
+login.onclick = function(){
+  if(!user.isLoggedIn){
+    return user.login();
+  }
+  user.logout();
+};
+user.on("login",function(token){
+  console.log("access was successful");
+  $("#westoredata .buttons a.logtoggle").text("Log Out");
+});
+user.on("logout",function(token){
+	console.log("logout");
+  $("#westoredata .buttons a.logtoggle").text("Log In");
 });
 $("#westoredata .buttons a.logtoggle").click(function(e){
   e.preventDefault();
@@ -30,9 +40,5 @@ $("#westoredata .buttons a.logtoggle").click(function(e){
     return user.login();
   }
   user.logout();
-  $(this).text("Log In");
 });
-user.on("access-success",function(token){
-  console.log("access was successful");
-  $("#westoredata .buttons a.logtoggle").text("Log Out");
-});
+
