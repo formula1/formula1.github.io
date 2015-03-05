@@ -81,27 +81,40 @@
   </div>
   <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
 </div>
-<div class="container bloglist">
+<div class="container blogsingle" >
 </div>
-<script type="text/html" class="template bloglist">
-    <article class="row">
-      <div class="col-sm-8 col-sm-offset-2">
-        <header class="{{state}}">
-          <h3 class="title">
-            <a href="article.html#!{{number}}">
-              {{title}}
-            </a>
-          </h3>
-          <a href="{{html_url}}">View on Github</a>
-        </header>
-        <div class="content">{{{bodyHTML}}}</div>
-        <footer>
-          <a href="article.html#!{{number}}" class="comments">
-            There are {{comments}} comments.
+<script type="text/html" class="template blogsingle" >
+  <article class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <header class="{{state}}">
+        <h3 class="title">
+          <a href="article.html#!{{number}}">
+            {{title}}
           </a>
-        </footer>
-      </div>
-    </article>
+        </h3>
+        <a href="{{html_url}}">View on Github</a>
+      </header>
+      <div class="content" >{{{bodyHTML}}}</div>
+    </div>
+  </article>
+</script>
+<div class="container comments" >
+</div>
+<script type="text/html" class="template comments">
+  <article class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <header class="{{state}}">
+        <h3 class="title">
+          <a href="{{user.html_url}}">
+            <img src="{{user.avatar_url}}" />
+            <span>{{user.login}}</span>
+          </a>
+        </h3>
+        <a href="{{html_url}}">View on Github</a>
+      </header>
+      <div class="content">{{{bodyHTML}}}</div>
+    </div>
+  </article>
 </script>
 </section>
 <!-- END: ISSUES ITEM TEMPLATE -->
@@ -329,38 +342,106 @@ user.on("error",function(e){
 user.on("login",function(token){
   jQuery(".four-zero-three .content").text("You've authenticated!");
 });
-var listHandler;
+var num = (function(){
+  var temp = document.location.href.split("#!")[1];
+  console.log(temp);
+  if(/[0-9]+/.test(temp)) return temp;
+  temp = document.location.href.split("?");
+  if(temp.length == 1){
+    return add404();
+  }
+  temp = require("querystring").parse(temp[1]);
+  if(!temp._escaped_fragment_){
+    return add404();
+  }
+  return temp._escaped_fragment_;
+})();
+
+var singleHandler;
 
 jQuery(function($){
-  listHandler = new Template(
-    "script.template.bloglist",
-    "div.container.bloglist"
+  if(!num) return;
+  singleHandler = new Template(
+    "script.template.blogsingle",
+    "div.container.blogsingle"
   );
-  listHandler._x = {
-    uri: "https://api.github.com/repos/NodeOS/NodeOS/issues?labels=blog&sort=updated",
+  singleHandler._x = {
+    uri: "https://api.github.com/repos/NodeOS/NodeOS/issues/"+num,
     last: void(0)
   };
   cacheOrUriIterator(
-    "issue-list",
+    "issue-"+num,
     {
       timestamp2URI: function(timestamp,next){
-        var uri = listHandler._x.uri;
+        if(Date.now() - timestamp < 1000*60*60*24) return;
+        user.asAuthority(singleHandler._x.uri,next);
+      },
+      prep: function(item, next){
+        item.timestamp = Date.now();
+        var l = item.labels.length;
+        while(l--){
+          if(item.labels[l].name === "blog"){
+            break;
+          }
+        }
+        if(l < 0){
+          return addError({
+            name:"Trying to load a non-blog?",
+            message: "I technically can't stop you since this is clientside."+
+              " Hopefully my code feels clean enough to hack"
+          });
+        }
+        parseMarkdown(item,next);
+      },
+      ready: function(item,next){
+        singleHandler.add(item);
+        next();
+      },
+      done: function(date){
+        singleHandler._x.last = date;
+      },
+      error: function(error){
+        if(error.status && error.status === 403){
+          add403();
+        }else{
+          addError(error);
+        }
+      }
+    }
+  );
+});
+var commentHandler;
+
+jQuery(function($){
+  if(!num) return;
+  commentHandler = new Template(
+    "script.template.comments",
+    "div.container.comments"
+  );
+  commentHandler._x = {
+    uri: "https://api.github.com/repos/NodeOS/NodeOS/issues/"+num+"/comments",
+    last: void(0)
+  };
+  cacheOrUriIterator(
+    "issue-comments-"+num,
+    {
+      timestamp2URI: function(timestamp,next){
+        var uri = commentHandler._x.uri;
         if(timestamp) {
-          var temp = new Date(timestamp+1000);
-          uri += "&since="+(new Date(timestamp+1000)).toISOString();
+          uri += "?since="+(new Date(timestamp+1000)).toISOString();
         }
         user.asAuthority(uri,next);
       },
       prep: function(item, next){
-        item.timestamp = (new Date(item.updated_at)).getTime();
+        item.timestamp = (new Date(item.created_at)).getTime();
         parseMarkdown(item,next);
       },
       ready: function(item,next){
-        listHandler.add(item);
+        commentHandler.add(item);
         setTimeout(next,1);
       },
       done: function(date){
-        listHandler._x.last = date;
+        commentHandler._x.last = date;
       },
       error: function(error){
         if(error.status && error.status === 403){
