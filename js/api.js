@@ -10458,6 +10458,7 @@ AuthProvider.prototype.parseURL = function(){
     return this.fail("not expecting to login");
   }
   this.info = JSON.parse(this.info);
+  console.log(this.info);
   if(this.info.access_token){
     return this.finish();
   }
